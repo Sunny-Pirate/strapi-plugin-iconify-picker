@@ -20,53 +20,46 @@ The project is pre-configured with a GitHub Action to automate the release proce
 1.  **Enable Trusted Publisher on npmjs.com**:
     *   Navigate to your package **Settings** > **Publishing Access**.
     *   Find the **Trusted Publisher** section.
-    *   Configure it for your GitHub repository and workflow filename (e.g., `publish.yml`).
+    *   Select **GitHub Actions** and configure:
+        ** **Organization/User**: `Sunny-Pirate`
+        ** **Repository**: `strapi-plugin-iconify-picker`
+        ** **Workflow filename**: `publish.yml` (deve coincidere esattamente).
 2.  **Workflow Permissions**:
-    *   Ensure your `.github/workflows/publish.yml` has the `id-token: write` permission.
-    *   This allows GitHub to generate short-lived, cryptographically signed OIDC tokens for authentication.
+    *   Il file `.github/workflows/publish.yml` deve avere i permessi `id-token: write` e `contents: read`.
+    *   Questo permette a GitHub di generare token OIDC temporanei e firmati crittograficamente, eliminando la necessità di token npm a lungo termine.
+
+=== Provenance (Attestazione di Origine)
+
+Utilizzando il Trusted Publishing, npm genera automaticamente le **Provenance Attestations**. Questo fornisce una prova crittografica della provenienza del pacchetto, permettendo agli utenti di verificare che il codice sia stato effettivamente costruito nel workflow autorizzato.
 
 === Execution
 
-To trigger a new release, simply create and push a Git tag:
+Per innescare il rilascio, basta creare e pushare un tag:
 
 ```bash
-# Automatically increments version, creates a commit, and a tag
+# Incrementa la versione e crea il tag
 npm version patch
 
-# Push everything to the remote
-git push origin master --tags
+# Pusha i cambiamenti e i tag
+git push origin master --tags && git push origin master
 ```
-
-The GitHub Action in `.github/workflows/publish.yml` will automatically build the plugin and push it to the NPM registry.
-
-== Manual Publishing
-
-If you need to publish manually from your local machine, follow these steps to ensure Git and NPM remain synchronized.
-
-=== Step-by-Step Workflow
-
-1.  **Update Version & Tag**:
-    ```bash
-    yarn version --new-version [version]
-    # Example: yarn version --new-version 1.0.1
-    ```
-2.  **Sync with GitHub**:
-    ```bash
-    git push origin master --tags
-    ```
-3.  **Perform the Publish**:
-    Since 2FA is enabled on your account, you must provide the One-Time Password (OTP) from your authenticator app.
-    ```bash
-    npm publish --otp=XXXXXX
-    ```
 
 [IMPORTANT]
 ====
-The `package.json` includes a `prepublishOnly` script that automatically runs `npm run build`. This ensures that you never accidentally publish source code without the compiled distribution assets.
+**Requisiti Tecnici**: Il Trusted Publishing richiede **npm CLI v11.5.1** o superiore. Il nostro workflow è configurato per aggiornare automaticamente npm all'ultima versione disponibile.
 ====
 
 == Security Best Practices
 
-*   **Automation Tokens**: Use them exclusively for CI/CD. Never share them or commit them to the repository.
-*   **Scoped Access**: Ensure your NPM token has only the necessary permissions for the specific package.
-*   **Build Verification**: Always verify that the `dist/` folder is correctly populated before running a manual publish.
+*   **Preferisci OIDC ai Token**: I token OIDC sono a breve scadenza e legati specificamente al workflow, riducendo drasticamente il rischio di compromissione.
+*   **Restrizione Accessi**: Una volta configurato il Trusted Publisher, è consigliabile impostare il package su npmjs.com per escludere l'uso di token tradizionali nelle impostazioni di "Publishing Access".
+*   **Audit Periodico**: Controlla regolarmente le configurazioni dei Trusted Publishers e rimuovi eventuali token di automazione non più necessari.
+
+== Manual Publishing (Fallback)
+
+Se devi pubblicare manualmente, dovrai inserire l'OTP della tua app di autenticazione 2FA:
+
+```bash
+npm publish --otp=XXXXXX
+```
+
