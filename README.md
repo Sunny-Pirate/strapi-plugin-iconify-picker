@@ -1,7 +1,5 @@
 # Strapi Iconify Picker
 
-![Strapi Iconify Picker](docs/modules/ROOT/assets/images/strapi-iconify-picker-usage.png)
-
 **Design at the speed of thought.**
 
 Unlock the power of 150,000+ icons within your Strapi content workflow. Effortless search. Instant previews. uncompromising performance.
@@ -16,34 +14,64 @@ We built the Iconify Picker to be invisible. It steps out of your way, letting y
 
 * **Infinite Canvas**: Access every major icon set—Material, Lucide, Phosphor, Solar, and more.
 * **Instant Clarity**: Large, sharp previews ensuring you pick the perfect asset every time.
-* **Precision Control**: Admins curate the available sets, ensuring brand consistency across the board.
-* **Featherlight**: Stores a minimal JSON object. No bloating your database with raw SVG data.
+* **Absolute Control**: Admins curate the available sets, ensuring brand harmony.
+* **The Power of 'None'**: A dedicated removal workflow makes refining your selection as easy as making one.
+* **Featherlight Architecture**: Structured JSON storage keeps your database clean and your frontend fast.
+
+![Strapi Iconify Picker](docs/modules/ROOT/assets/images/guide-step-11.png)
 
 ## Quick Start
 
 ### 1. Install
 
+<details>
+<summary>Click to view installation commands</summary>
+
 ```bash
+yarn add dls-iconify-picker
+# or
 npm install dls-iconify-picker
 ```
+
+</details>
 
 ### 2. Configure
 
 Add to your `config/plugins.ts`:
 
 ```typescript
-export default () => ({
+export default ({ env }: { env: any }) => ({
   'dls-iconify-picker': {
     enabled: true,
+    config: {
+      collections: env.array('DLS_ICON_COLLECTIONS', ['solar', 'logos', 'flag', 'lucide'])
+    },
   },
 });
 ```
 
 ### 3. Build
 
+<details>
+<summary>Click to view build commands</summary>
+
 ```bash
+yarn build && yarn develop
+# or
 npm run build && npm run develop
 ```
+
+</details>
+
+## Governance & Configuration
+
+Precision starts at the foundation. Control which collections are available to your team through environment variables or direct configuration.
+
+### Environment Variables
+
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `DLS_ICON_COLLECTIONS` | Comma-separated list of Iconify prefixes | `solar,logos,flag,lucide` |
 
 ## Usage
 
@@ -53,15 +81,16 @@ Designed for focus. The interface puts your content first.
 
 | 🔍 **Search Experience** | 👁️ **Final Selection** |
 | :--- | :--- |
-| ![Search](docs/modules/ROOT/assets/images/guide-step-10.png) | ![Preview](docs/modules/ROOT/assets/images/guide-step-11.png) |
+| ![Search](docs/modules/ROOT/assets/images/guide-step-12.png) | ![Preview](docs/modules/ROOT/assets/images/guide-step-11.png) |
 
 | ⚙️ **Governance & Control** |
 | :--- |
-| ![Configuration](docs/modules/ROOT/assets/images/strapi-iconify-picker-configuration.png) |
+| ![Configuration](docs/modules/ROOT/assets/images/guide-step-06.png) |
 
 1. **Selection**: Select from curated collections tailored to your brand.
 2. **Discovery**: High-performance search helps you find the perfect icon in seconds.
 3. **Preview**: Instant visual feedback ensures your selection matches your design.
+4. **Refinement**: One-click removal keeps your workflow clean and decisive.
 
 ## Architecture
 
