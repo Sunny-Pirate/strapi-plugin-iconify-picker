@@ -1,30 +1,23 @@
 # Strapi Iconify Picker
 
-![Iconify Picker Usage](public/usage.png)
+![Strapi Iconify Picker](public/strapi-iconify-picker-usage.png)
 
-**The icons you love. The workflow you deserve.**
+**Design at the speed of thought.**
 
-Bringing the power of 150,000+ icons directly into your Strapi admin panel. Integrating seamlessly with the Iconify ecosystem, it offers a design-first experience for content editors and developers alike.
+Unlock the power of 150,000+ icons within your Strapi content workflow. Effortless search. Instant previews. uncompromising performance.
 
 [![Strapi](https://img.shields.io/badge/Strapi-v5-2F2E8B?style=flat&logo=strapi)](https://strapi.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Table of Contents
+## The Experience
 
-- [Features](#features)
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Frontend Implementation](#frontend-implementation)
+We built the Iconify Picker to be invisible. It steps out of your way, letting your creativity flow.
 
-## Features
-
-- 🎨 **Infinite Choice**: Access every collection from Material Design, Lucide, Phosphor, Solar, and more.
-- ⚡ **Instant Search**: Find the perfect icon in milliseconds, even across massive sets.
-- 👁️ **Visual Clarity**: Large, crisp previews ensure you never pick the wrong asset.
-- 👮 **Governance**: You decide which sets are available, maintaining your brand's design system.
-- 🧱 **Clean Data**: Stores a lightweight JSON object. No bloat. No raw SVG clutter in your DB.
+* **Infinite Canvas**: Access every major icon set—Material, Lucide, Phosphor, Solar, and more.
+* **Instant Clarity**: Large, sharp previews ensuring you pick the perfect asset every time.
+* **Precision Control**: Admins curate the available sets, ensuring brand consistency across the board.
+* **Featherlight**: Stores a minimal JSON object. No bloating your database with raw SVG data.
 
 ## Quick Start
 
@@ -36,7 +29,7 @@ npm install dls-iconify-picker
 
 ### 2. Configure
 
-Add the plugin to your `config/plugins.ts` file to enable it.
+Add to your `config/plugins.ts`:
 
 ```typescript
 export default () => ({
@@ -52,36 +45,23 @@ export default () => ({
 npm run build && npm run develop
 ```
 
-## Configuration
-
-Control is everything. Use the plugin setting page to toggle icon sets on or off, ensuring your editors stick to the brand guidelines.
-
-1. Navigate to **Settings** -> **Iconify Picker**.
-2. Enable the collections you want to use.
-
-![Configuration Screen](public/config.png)
-
 ## Usage
 
-Designed for flow. The 2x2 grid layout keeps context clear and actions effortless.
+Designed for focus. The interface puts your content first.
 
-### 1. Select Collection
+1. **Select**: Choose a collection from the dropdown.
+2. **Search**: Find your icon instantly.
+3. **Pick**: Click to select. The preview confirms your choice.
 
-Choose the right aesthetic for your content from the curated list.
+![Configuration](public/strapi-iconify-picker-configuration.png)
 
-### 2. Search & Browse
+## Architecture
 
-Type to filter. Use the pagination to explore. It feels instant because it is.
+Built with performance and scalability in mind.
 
-### 3. Pick & Preview
+### Data Model
 
-Click an icon. See it large. Confirm it's the one.
-
-## Frontend Implementation
-
-We believe in clean data. The field stores a structured JSON object, giving you total flexibility on the frontend.
-
-**Data Structure:**
+We store data in a clean, portable JSON format:
 
 ```json
 {
@@ -91,26 +71,7 @@ We believe in clean data. The field stores a structured JSON object, giving you 
 }
 ```
 
-### React / Next.js Example
-
-Using the `@iconify/react` component makes rendering effortless.
-
-```tsx
-import { Icon } from '@iconify/react';
-
-const MyComponent = ({ iconData }) => {
-  if (!iconData) return null;
-
-  return (
-    <Icon
-      icon={iconData.value}
-      width={24}
-      height={24}
-      className="text-primary-500"
-    />
-  );
-};
-```
+For detailed architectural diagrams (Class, Sequence, ER), please refer to the [Technical Documentation](docs/modules/ROOT/pages/iconify-picker.adoc).
 
 ## License
 

@@ -1,51 +1,130 @@
-= Iconify Picker Plugin
-:description: User guide for the Strapi Iconify Picker plugin.
+= Iconify Picker Plugin: Technical Documentation
+:description: Architectural overview and integration guide for the Strapi Iconify Picker.
 :imagesdir: ../assets/images
 
-The `dls-iconify-picker` is a robust custom field for Strapi v5 that allows editors to easily search, select, and manage icons from the vast [Iconify](https://iconify.design/) ecosystem.
+The `dls-iconify-picker` is a Strapi v5 plugin designed to provide a highly performant and scalable icon selection interface. This document outlines the system architecture, data models, and integration flows.
 
-== Features
+== System Architecture
 
-*   **Search & Pagination**: Quickly find the right icon with a built-in search bar and efficient pagination.
-*   **Visual Preview**: See exactly what you're picking with a large, clear preview area.
-*   **Multi-Collection Support**: Configure which icon sets (e.g., Solar, Lucide) are available to your editors.
-*   **JSON Storage**: Stores data safely as a structured JSON object.
+The plugin operates as a custom field provider within the Strapi Admin panel, communicating with a dedicated backend service that interfaces with the Iconify library.
+
+=== Component Class Diagram
+
+The following diagram illustrates the relationship between the clean Admin components and the Server-side logic.
+
+[mermaid]
+----
+classDiagram
+    subgraph Admin_Panel [Admin Interface]
+        class IconifyPickerInput {
+            -string selectedCollection
+            -string search
+            -int page
+            +render()
+            +handleSearch()
+        }
+        class IconPreviewPanel {
+            +displayIcons()
+            +handlePagination()
+        }
+        class PaginationFooter {
+            +renderControls()
+        }
+        IconifyPickerInput --> PaginationFooter
+        IconifyPickerInput --> IconPreviewPanel : optional usage
+    end
+
+    subgraph Server_API [Strapi Backend]
+        class IconifyController {
+            +getCollections()
+            +getIcons(prefix, limit, offset)
+        }
+        class IconifyService {
+            +fetchCollections()
+            +searchIcons(query)
+        }
+    end
+
+    IconifyPickerInput ..> IconifyController : REST Request
+    IconifyController --> IconifyService : Delegate
+----
+
+== Interaction Flow
+
+=== User Selection Sequence
+
+The process of selecting an icon involves a dynamic interaction between the client-side React component and the Strapi server.
+
+[mermaid]
+----
+sequenceDiagram
+    actor User
+    participant Frontend as IconifyPickerInput
+    participant API as Strapi API
+    participant Service as Iconify Service
+
+    User->>Frontend: Select Collection (e.g., "solar")
+    Frontend->>API: GET /icons/solar?limit=100
+    API->>Service: getIcons("solar")
+    Service-->>API: Returns Icon List
+    API-->>Frontend: JSON Response
+    Frontend->>Frontend: Render Grid
+    User->>Frontend: Types Search "box"
+    Frontend->>API: GET /icons/solar?q=box
+    API-->>Frontend: Filtered Results
+    User->>Frontend: Select Icon
+    Frontend->>Frontend: Update Field Value (JSON)
+----
+
+== Data Model (ER Diagram)
+
+The plugin does not create a new database table. Instead, it utilizes Strapi's JSON field type to store a structured object within your existing Content Types.
+
+[mermaid]
+----
+erDiagram
+    ContentType ||--o{ IconField : contains
+    IconField {
+        string prefix "Collection ID (e.g., solar)"
+        string icon "Icon Name (e.g., box-bold)"
+        string value "Full ID (e.g., solar:box-bold)"
+    }
+----
+
+== Integration Architecture
+
+Integrating the plugin into a Strapi project requires registration in the plugin configuration.
+
+[mermaid]
+----
+flowchart LR
+    Config[config/plugins.ts] -->|Enables| Plugin[dls-iconify-picker]
+    Plugin -->|Registers| CustomField[Custom Field: iconify-picker]
+    ContentTypeBuilder -->|Selects| CustomField
+    API -->|Serves| Assets[Iconify Json Data]
+----
 
 == Configuration
 
-Before using the picker, an administrator can configure which icon collections are available.
+Configure the available collections to govern the design system usage.
 
-1.  Navigate to **Settings** -> **Iconify Picker** (or the Plugin Homepage).
-2.  You will see a list of available icon sets (Diagnostic & Governance).
-3.  Use the toggles to enable or disable specific collections for your editors.
-
-image::iconify-config.png[Configuration Screen]
-
-== Usage Guide
-
-To use the icon picker in the Content Manager:
-
-1.  **Open an Entry**: Navigate to the collection type where you added the Iconify Picker field.
-2.  **Select Collection**: Use the dropdown in the top-left to choose an icon set (e.g., `solar`).
-3.  **Search Icons**: Type in the search bar (top-right) to filter icons by name.
-4.  **Browse**: Use the pagination controls (Next, Previous, Page Numbers) to browse through the results.
-5.  **Select**: Click on an icon in the grid (bottom-right).
-6.  **Preview**: The selected icon will appear in the large preview box (bottom-left) along with its name.
-    *   To remove a selection, click the **Remove** button in the preview area.
-
-image::iconify-usage.png[Usage Screenshot]
-
-== Data Format
-
-The field stores the selected icon as a JSON object, ensuring you have all the necessary metadata:
-
-[source,json]
+[source,typescript]
 ----
-{
-  "prefix": "solar",
-  "icon": "box-bold",
-  "value": "solar:box-bold"
-}
+// config/plugins.ts
+export default () => ({
+  'dls-iconify-picker': {
+    enabled: true,
+    config: {
+      // Future: Add specific collection allow/deny lists here
+    },
+  },
+});
 ----
 
-This structure allows you to easily render the icon in your frontend application using the `prefix` and `icon` name.
+== Screenshots
+
+=== Configuration Panel
+image::strapi-iconify-picker-configuration.png[Configuration Screen]
+
+=== Usage Interface
+image::strapi-iconify-picker-usage.png[Usage Interface]
