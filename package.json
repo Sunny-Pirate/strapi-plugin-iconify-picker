@@ -1,5 +1,5 @@
 {
-  "name": "strapi-plugin-iconify-picker",
+  "name": "@sunny-pirate/strapi-plugin-iconify-picker",
   "version": "1.0.1",
   "keywords": [
     "strapi",
@@ -72,7 +72,7 @@
   },
   "strapi": {
     "kind": "plugin",
-    "name": "strapi-plugin-iconify-picker",
+    "name": "@sunny-pirate/strapi-plugin-iconify-picker",
     "displayName": "Iconify Picker",
     "description": "The ultimate icon selection experience for Strapi v5. Access 150,000+ icons with a premium, focused workflow."
   },
@@ -86,5 +86,8 @@
     "url": "https://github.com/Sunny-Pirate/strapi-plugin-iconify-picker/issues"
   },
   "homepage": "https://github.com/Sunny-Pirate/strapi-plugin-iconify-picker#readme",
-  "author": "Luca Faccio <info@dreamlab.solutions>"
+  "author": "Luca Faccio <info@dreamlab.solutions>",
+  "publishConfig": {
+    "access": "public"
+  }
 }

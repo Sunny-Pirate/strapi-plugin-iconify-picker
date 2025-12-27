@@ -1,7 +1,7 @@
 = NPM Publishing Guide
 :description: Best practices for publishing the Iconify Picker plugin to the NPM registry.
 
-This guide outlines the workflow for releasing new versions of the `strapi-plugin-iconify-picker`. It covers both manual publishing with Two-Factor Authentication (2FA) and automated delivery via GitHub Actions.
+This guide outlines the workflow for releasing new versions of the `@sunny-pirate/strapi-plugin-iconify-picker`. It covers both manual publishing with Two-Factor Authentication (2FA) and automated delivery via GitHub Actions.
 
 == Versioning Principles
 
@@ -17,13 +17,13 @@ The project is pre-configured with a GitHub Action to automate the release proce
 
 === Configuration
 
-1.  **Generate an Automation Token**:
-    *   Log in to your link:https://www.npmjs.com/[npm account].
-    *   Navigate to **Access Tokens** > **Generate New Token**.
-    *   Select the **Automation** type (this bypasses 2FA for publishing).
-2.  **Configure GitHub Secrets**:
-    *   In your GitHub repository, go to **Settings** > **Secrets and variables** > **Actions**.
-    *   Create a new repository secret named `NPM_TOKEN`.
+1.  **Enable Trusted Publisher on npmjs.com**:
+    *   Navigate to your package **Settings** > **Publishing Access**.
+    *   Find the **Trusted Publisher** section.
+    *   Configure it for your GitHub repository and workflow filename (e.g., `publish.yml`).
+2.  **Workflow Permissions**:
+    *   Ensure your `.github/workflows/publish.yml` has the `id-token: write` permission.
+    *   This allows GitHub to generate short-lived, cryptographically signed OIDC tokens for authentication.
 
 === Execution
 

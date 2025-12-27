@@ -28,9 +28,9 @@ We built the Iconify Picker to be invisible. It steps out of your way, letting y
 <summary>Click to view installation commands</summary>
 
 ```bash
-yarn add dls-iconify-picker
+yarn add @sunny-pirate/strapi-plugin-iconify-picker
 # or
-npm install dls-iconify-picker
+npm install @sunny-pirate/strapi-plugin-iconify-picker
 ```
 
 </details>
@@ -41,7 +41,7 @@ Add to your `config/plugins.ts`:
 
 ```typescript
 export default ({ env }: { env: any }) => ({
-  'dls-iconify-picker': {
+  '@sunny-pirate/strapi-plugin-iconify-picker': {
     enabled: true,
     config: {
       collections: env.array('DLS_ICON_COLLECTIONS', ['solar', 'logos', 'flag', 'lucide'])
