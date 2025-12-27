@@ -1,16 +1,26 @@
-= Iconify Picker Plugin: Technical Documentation
-:description: Architectural overview and integration guide for the Strapi Iconify Picker.
+= Strapi Iconify Picker: Technical Documentation
+:description: Architecture and integration guide for the Strapi Iconify Picker plugin (Strapi v5).
 :imagesdir: ../assets/images
 
-The `dls-iconify-picker` is a Strapi v5 plugin designed to provide a highly performant and scalable icon selection interface. This document outlines the system architecture, data models, and integration flows.
+The `@sunny-pirate/strapi-plugin-iconify-picker` plugin adds a focused icon picker field to the Strapi Admin. It surfaces icons from installed Iconify collections and stores the selection as structured JSON in your Content Types.
+
+== Requirements
+
+- Strapi v5
+
+== What It Does
+
+- Provides a custom field input to pick an Iconify icon.
+- Supports curated collections (governance) via configuration.
+- Stores a portable JSON payload: `{ prefix, icon, value }`.
 
 == System Architecture
 
-The plugin operates as a custom field provider within the Strapi Admin panel, communicating with a dedicated backend service that interfaces with the Iconify library.
+The plugin runs as a custom field provider in the Strapi Admin and communicates with a backend controller/service that reads from the Iconify ecosystem available in your project.
 
 === Component Class Diagram
 
-The following diagram illustrates the relationship between the clean Admin components and the Server-side logic.
+The diagram below shows how the Admin UI and backend pieces relate.
 
 [mermaid]
 ----
@@ -37,11 +47,12 @@ classDiagram
     subgraph Server_API [Strapi Backend]
         class IconifyController {
             +getCollections()
-            +getIcons(prefix, limit, offset)
+            +getIcons(prefix, limit, offset, q)
         }
         class IconifyService {
-            +fetchCollections()
-            +searchIcons(query)
+            +listCollections()
+            +listIcons(prefix, limit, offset)
+            +searchIcons(prefix, q, limit, offset)
         }
     end
 
@@ -53,8 +64,6 @@ classDiagram
 
 === User Selection Sequence
 
-The process of selecting an icon involves a dynamic interaction between the client-side React component and the Strapi server.
-
 [mermaid]
 ----
 sequenceDiagram
@@ -63,22 +72,26 @@ sequenceDiagram
     participant API as Strapi API
     participant Service as Iconify Service
 
-    User->>Frontend: Select Collection (e.g., "solar")
-    Frontend->>API: GET /icons/solar?limit=100
-    API->>Service: getIcons("solar")
-    Service-->>API: Returns Icon List
-    API-->>Frontend: JSON Response
-    Frontend->>Frontend: Render Grid
-    User->>Frontend: Types Search "box"
-    Frontend->>API: GET /icons/solar?q=box
-    API-->>Frontend: Filtered Results
-    User->>Frontend: Select Icon
-    Frontend->>Frontend: Update Field Value (JSON)
+    User->>Frontend: Select collection (e.g., "solar")
+    Frontend->>API: GET /iconify/collections/solar?limit=100
+    API->>Service: listIcons("solar")
+    Service-->>API: Returns icon list
+    API-->>Frontend: JSON response
+    Frontend->>Frontend: Render grid
+
+    User->>Frontend: Search "box"
+    Frontend->>API: GET /iconify/collections/solar?q=box
+    API->>Service: searchIcons("solar","box")
+    Service-->>API: Filtered results
+    API-->>Frontend: JSON response
+
+    User->>Frontend: Select icon
+    Frontend->>Frontend: Update field value (JSON)
 ----
 
-== Data Model (ER Diagram)
+== Data Model
 
-The plugin does not create a new database table. Instead, it utilizes Strapi's JSON field type to store a structured object within your existing Content Types.
+The plugin does not create new database tables. It stores a structured object in an existing JSON field.
 
 [mermaid]
 ----
@@ -91,66 +104,105 @@ erDiagram
     }
 ----
 
-== Integration Architecture
+Example payload:
 
-Integrating the plugin into a Strapi project requires registration in the plugin configuration.
+[source,json]
+----
+{
+  "prefix": "solar",
+  "icon": "box-bold",
+  "value": "solar:box-bold"
+}
+----
+
+== Integration
+
+=== Enable The Plugin
+
+Register the plugin in `config/plugins.ts`. The configuration key must match the plugin id defined in `package.json` under `strapi.name`.
+
+[source,ts]
+----
+type StrapiEnv = {
+  array: (key: string, defaultValue?: string[]) => string[];
+};
+
+export default ({ env }: { env: StrapiEnv }) => ({
+  '@sunny-pirate/strapi-plugin-iconify-picker': {
+    enabled: true,
+    config: {
+      collections: env.array('DLS_ICON_COLLECTIONS', ['solar', 'logos', 'flag', 'lucide']),
+    },
+  },
+});
+----
+
+=== Integration Architecture
 
 [mermaid]
 ----
 flowchart LR
-    Config[config/plugins.ts] -->|Enables| Plugin[dls-iconify-picker]
+    Config[config/plugins.ts] -->|Enables| Plugin[@sunny-pirate/strapi-plugin-iconify-picker]
     Plugin -->|Registers| CustomField[Custom Field: iconify-picker]
     ContentTypeBuilder -->|Selects| CustomField
-    API -->|Serves| Assets[Iconify Json Data]
+    Admin -->|Requests| API[Strapi API endpoints]
+    API -->|Reads| IconData[Installed Iconify collections (external packages)]
 ----
 
 == Step-by-Step Configuration Guide
 
-Follow this visual guide to get up and running.
+Follow this visual guide to get up and running.s
 
 === 1. Plugin Configuration
 
-Navigate to the settings page to verify the plugin is active and configure available collections.
+Verify the plugin is active and configure available collections.
 
 image::guide-step-01.png[Settings Page]
 
 === 2. Content Type Builder
 
-Open the Content Type Builder to add the icon field to your schema.
+Add the Iconify Picker field to your schema.
 
 image::guide-step-02.png[Content Type Builder]
 
 === 3. Adding the Field
 
-Select the "Custom" tab (or JSON field) to find the Iconify Picker.
+Find the picker under Custom Fields (or JSON-compatible fields depending on your setup).
 
 image::guide-step-03.png[Select Custom Field]
 
 === 4. Field Configuration
 
-Name your field (e.g., `icon`) and configure any advanced settings.
+Name your field (for example, `icon`) and save.
 
 image::guide-step-04.png[Configure Field]
 
 === 5. Saving the Content Type
 
-Save your changes. The server will restart to apply the new schema.
+Save your changes. Strapi will rebuild the Admin.
 
 image::guide-step-05.png[Save Schema]
 
 === 6. Using the Picker
 
-Go to the Content Manager and create a new entry. You will see the new Iconify Picker field.
+Create or edit an entry and use the Iconify Picker field.
 
 image::guide-step-06.png[Content Manager Entry]
 
 === 7. Selecting Icons
 
-Use the dropdown to filter by collection, or search directly for an icon.
+Filter by collection or search within the selected collection.
 
 image::guide-step-07.png[Select Icon]
 
-*(For steps 8-11, refer to the full usage flow in the introduction.)*
+== Iconify and Icon Sets Licensing
+
+This plugin integrates with the Iconify ecosystem but is not an official or endorsed Iconify product.
+
+- Icon sets have their own licenses and attribution requirements.
+- This plugin does not bundle icon data or icon set packages.
+- If you distribute icon sets, include the relevant licenses and attributions for those sets.
+- Do not imply affiliation or endorsement by Iconify.
 
 == Screenshots
 
