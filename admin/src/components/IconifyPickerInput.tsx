@@ -11,15 +11,11 @@ import {
   SingleSelectOption,
   Loader,
   TextButton,
-  Pagination,
-  PageLink,
-  PreviousLink,
-  NextLink,
-  Dots,
 } from '@strapi/design-system';
 import { useFetchClient } from '@strapi/strapi/admin';
 import { Icon } from '@iconify/react';
 import { PLUGIN_ID } from '../pluginId';
+import { PaginationFooter } from './PaginationFooter';
 
 
 
@@ -142,35 +138,7 @@ const IconifyPickerInput = React.forwardRef<HTMLDivElement, any>((props, ref) =>
     setCurrentPage(page);
   };
 
-  const pageNumbers = React.useMemo(() => {
-    const pages: (number | 'dots')[] = [];
-    const maxPagesToShow = 5;
 
-    if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(1);
-      let start = Math.max(2, currentPage - 1);
-      let end = Math.min(totalPages - 1, currentPage + 1);
-
-      if (currentPage <= 3) {
-        end = 4;
-      } else if (currentPage >= totalPages - 2) {
-        start = totalPages - 3;
-      }
-
-      if (start > 2) pages.push('dots');
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-      if (end < totalPages - 1) pages.push('dots');
-
-      pages.push(totalPages);
-    }
-    return pages;
-  }, [currentPage, totalPages]);
 
   const selectIcon = (iconName: string) => {
     if (!selectedCollection) return;
@@ -238,28 +206,34 @@ const IconifyPickerInput = React.forwardRef<HTMLDivElement, any>((props, ref) =>
       >
         <Grid.Root gap={4}>
           <Grid.Item col={3} s={12}>
-            <Box paddingBottom={1}>
+            <Flex paddingBottom={1} width="100%" gap={2} justifyContent="space-between">
               <Typography variant="pi" fontWeight="bold" textColor="neutral600">
                 Collection
               </Typography>
-            </Box>
-            <SingleSelect
-              disabled={disabled}
-              value={selectedCollection}
-              onChange={(v: string | number) => setSelectedCollection(String(v))}
-              placeholder="Select collection"
-              customizeContent={(value: string) => value}
-            >
-              {availableCollections.map((col) => (
-                <SingleSelectOption key={col} value={col}>
-                  {col}
-                </SingleSelectOption>
-              ))}
-            </SingleSelect>
+              <SingleSelect
+                disabled={disabled}
+                value={selectedCollection}
+                onChange={(v: string | number) => setSelectedCollection(String(v))}
+                placeholder="Select collection"
+                customizeContent={(value: string) => value}
+              >
+                {availableCollections.map((col) => (
+                  <SingleSelectOption key={col} value={col}>
+                    {col}
+                  </SingleSelectOption>
+                ))}
+              </SingleSelect>
+            </Flex>
           </Grid.Item>
 
           <Grid.Item col={9} s={12}>
-            <Flex justifyContent="space-between" alignItems="flex-end" gap={2}>
+            <Flex
+              width="100%"
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              gap={2}
+            >
               <Box grow={1}>
                 <TextInput
                   name={`${name}-search`}
@@ -271,29 +245,27 @@ const IconifyPickerInput = React.forwardRef<HTMLDivElement, any>((props, ref) =>
               </Box>
 
               {totalPages > 1 && (
-                <Pagination activePage={currentPage} pageCount={totalPages}>
-                  <PreviousLink onClick={() => handlePageChange(Math.max(1, currentPage - 1))}>Previous</PreviousLink>
-                  {pageNumbers.map((page, index) => {
-                    if (page === 'dots') return <Dots key={`dots-${index}`}>...</Dots>;
-                    return (
-                      <PageLink key={page} number={page} onClick={() => handlePageChange(page)}>
-                        {page}
-                      </PageLink>
-                    );
-                  })}
-                  <NextLink onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}>Next</NextLink>
-                </Pagination>
+                <PaginationFooter
+                  activePage={currentPage}
+                  pageCount={totalPages}
+                  onPageChange={handlePageChange}
+                />
               )}
             </Flex>
           </Grid.Item>
 
           <Grid.Item col={3} s={12}>
-            <Box
+            <Flex
               background="neutral100"
               hasRadius
               padding={4}
+              width="100%"
               height="100%"
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
+              display="flex"
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
             >
               {value ? (() => {
                 let displayValue = '';
@@ -324,7 +296,7 @@ const IconifyPickerInput = React.forwardRef<HTMLDivElement, any>((props, ref) =>
               })() : (
                 <Typography variant="pi" textColor="neutral500">No icon selected</Typography>
               )}
-            </Box>
+            </Flex>
           </Grid.Item>
 
           <Grid.Item col={9} s={12}>
@@ -345,6 +317,7 @@ const IconifyPickerInput = React.forwardRef<HTMLDivElement, any>((props, ref) =>
                   gridTemplateColumns: 'repeat(auto-fill, minmax(64px, 1fr))',
                   gap: '8px',
                   maxHeight: '320px',
+                  width: '100%',
                   overflowY: 'auto',
                   paddingRight: '4px',
                 }}

@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import { Box, Flex, Typography, Loader, SingleSelect, SingleSelectOption, PreviousLink, PageLink, NextLink, Dots } from '@strapi/design-system';
+import React, { useState } from 'react';
+import { Box, Flex, Typography, Loader } from '@strapi/design-system';
 import { Icon } from '@iconify/react';
-import { Pagination } from '@strapi/design-system';
+import { PaginationFooter } from './PaginationFooter';
 
 interface IconPreviewPanelProps {
     selectedPrefix: string | null;
@@ -38,43 +38,7 @@ export const IconPreviewPanel: React.FC<IconPreviewPanelProps> = ({
         setCurrentPage(1); // Reset to first page when changing page size
     };
 
-    // Generate page numbers to display
-    const pageNumbers = useMemo(() => {
-        const pages: (number | 'dots')[] = [];
-        const maxPagesToShow = 5;
 
-        if (totalPages <= maxPagesToShow) {
-            for (let i = 1; i <= totalPages; i++) {
-                pages.push(i);
-            }
-        } else {
-            // Always show first page
-            pages.push(1);
-
-            // Calculate range around current page
-            let start = Math.max(2, currentPage - 1);
-            let end = Math.min(totalPages - 1, currentPage + 1);
-
-            // Adjust if we're near the start or end
-            if (currentPage <= 3) {
-                end = 4;
-            } else if (currentPage >= totalPages - 2) {
-                start = totalPages - 3;
-            }
-
-            // Add dots and middle pages
-            if (start > 2) pages.push('dots');
-            for (let i = start; i <= end; i++) {
-                pages.push(i);
-            }
-            if (end < totalPages - 1) pages.push('dots');
-
-            // Always show last page
-            pages.push(totalPages);
-        }
-
-        return pages;
-    }, [currentPage, totalPages]);
 
     return (
         <Box padding={6} background="neutral0" hasRadius shadow="filterShadow" grow={1}>
@@ -83,52 +47,14 @@ export const IconPreviewPanel: React.FC<IconPreviewPanelProps> = ({
                     Icon Preview
                 </Typography>
                 {selectedPrefix && !loadingPreview && previewIcons.length > 0 && (
-                    <Flex direction="row" gap={3} alignItems="center">
-                        {totalPages > 1 && (
-                            <Flex justifyContent="center" gap={1} marginRight={4}>
-                                <Pagination>
-                                    <PreviousLink
-                                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                                    >
-                                        Previous
-                                    </PreviousLink>
-                                    {pageNumbers.map((page, index) => {
-                                        if (page === 'dots') {
-                                            return <Dots key={`dots-${index}`}>...</Dots>;
-                                        }
-                                        return (
-                                            <PageLink
-                                                key={page}
-                                                number={page}
-                                                onClick={() => handlePageChange(page)}
-                                            >
-                                                {page}
-                                            </PageLink>
-                                        );
-                                    })}
-                                    <NextLink
-                                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                                    >
-                                        Next
-                                    </NextLink>
-                                </Pagination>
-                            </Flex>
-                        )}
-                        <Typography variant="pi" textColor="neutral600">
-                            Per page:
-                        </Typography>
-                        <SingleSelect
-                            value={pageSize}
-                            onChange={handlePageSizeChange}
-                            size="S"
-                        >
-                            {PAGE_SIZE_OPTIONS.map((size) => (
-                                <SingleSelectOption key={size} value={size}>
-                                    {size}
-                                </SingleSelectOption>
-                            ))}
-                        </SingleSelect>
-                    </Flex>
+                    <PaginationFooter
+                        activePage={currentPage}
+                        pageCount={totalPages}
+                        onPageChange={handlePageChange}
+                        pageSize={pageSize}
+                        onPageSizeChange={handlePageSizeChange}
+                        pageSizeOptions={PAGE_SIZE_OPTIONS}
+                    />
                 )}
             </Flex>
 

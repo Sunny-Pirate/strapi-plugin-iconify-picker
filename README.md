@@ -1,73 +1,35 @@
-# Strapi Plugin Iconify Picker
+# Strapi Iconify Picker 🚀
 
-A custom field for Strapi v5 that allows editors to select icons from [Iconify](https://iconify.design/) collections. Stores the selected icon as a JSON object.
+**The ultimate icon selection experience for Strapi v5.**
 
-## Features
+Empower your content editors with access to over 150,000 icons from the Iconify ecosystem (Material Design, Lucide, Phosphor, Solar, and more) directly within the Strapi Content Manager.
 
-- **Iconify Integration**: Browse and search icons from any Iconify collection (e.g., Solar, Lucide, Material Design).
-- **Search & Pagination**: Efficiently find icons with a search bar and paginated grid.
-- **Visual Preview**: Large preview of the selected icon.
-- **Configurable**: Choose which icon collections are available to editors.
-- **JSON Storage**: Saves icon data as a structured JSON object: `{ prefix, icon, value }`.
+![Iconify Picker Usage](public/usage.png)
 
-## Installation
+## Why use this plugin?
 
-```bash
-npm install dls-iconify-picker
-```
+- **🎨 Infinite Choice**: Access any icon collection available on Iconify.
+- **⚡ High Performance**: Fast search and efficient server-side pagination for large collections (10,000+ icons).
+- **🛠️ Developer Friendly**: Stores data as clean JSON objects, ready for your frontend.
+- **👮 Governance Control**: Admins can restrict which icon sets are available to maintain design consistency.
 
-## Configuration
+## Key Features
 
-1. **Add Custom Field**: In your Content Type Builder, add a "JSON" field and select "Iconify Picker" from the custom field options.
-2. **Plugin Settings**: Go to `Settings -> Iconify Picker` (or the Plugin Homepage) to view available collections.
-3. **Enable Collections**: You can enable/disable specific collections in the config or via the diagnostics page.
+- **Smart Layout**: An intuitive 2x2 grid interface designed for productivity.
+- **Visual Preview**: Large, instant preview of selected icons.
+- **Search & Filter**: Find the perfect icon in seconds.
+- **Fully Configurable**: Toggle collections on/off via the admin settings.
 
-`config/plugins.ts`:
+![Configuration Screen](public/config.png)
 
-```typescript
-export default () => ({
-  'dls-iconify-picker': {
-    enabled: true,
-    config: {
-      // optional configuration
-    },
-  },
-});
-```
+## Quick Start
 
-![Configuration Screen](file:///home/dreamux/.gemini/antigravity/brain/c9f8ae13-4b6f-4e1d-b30b-1ef259b709dc/plugin_configuration_screen_1766854246498.png)
+1. **Install**: `npm install dls-iconify-picker`
+2. **Configure**: Add to `config/plugins.ts`.
+3. **Use**: Add a "JSON" field to your Content Type and select "Iconify Picker".
 
-## Usage
+*For detailed documentation and user guides, please refer to the project documentation.*
 
-In the Content Manager:
+## License
 
-1. **Select Collection**: Choose an icon set from the dropdown (e.g., `solar`).
-2. **Search**: Type to filter icons.
-3. **Select**: Click an icon to select it.
-4. **Preview**: The selected icon appears in the preview box.
-
-![Usage Screenshot](file:///home/dreamux/.gemini/antigravity/brain/c9f8ae13-4b6f-4e1d-b30b-1ef259b709dc/grid_fix_verified_1766853726518.png)
-
-## Developer Guide
-
-### Data Format
-
-The field saves data in the following format:
-
-```json
-{
-  "prefix": "solar",
-  "icon": "box-bold",
-  "value": "solar:box-bold"
-}
-```
-
-### TypeScript Interface
-
-```typescript
-interface IconifyValue {
-  prefix: string;
-  icon: string;
-  value: string; // prefix:icon
-}
-```
+MIT
