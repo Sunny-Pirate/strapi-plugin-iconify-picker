@@ -104,22 +104,53 @@ flowchart LR
     API -->|Serves| Assets[Iconify Json Data]
 ----
 
-== Configuration
+== Step-by-Step Configuration Guide
 
-Configure the available collections to govern the design system usage.
+Follow this visual guide to get up and running.
 
-[source,typescript]
-----
-// config/plugins.ts
-export default () => ({
-  'dls-iconify-picker': {
-    enabled: true,
-    config: {
-      // Future: Add specific collection allow/deny lists here
-    },
-  },
-});
-----
+=== 1. Plugin Configuration
+
+Navigate to the settings page to verify the plugin is active and configure available collections.
+
+image::guide-step-01.png[Settings Page]
+
+=== 2. Content Type Builder
+
+Open the Content Type Builder to add the icon field to your schema.
+
+image::guide-step-02.png[Content Type Builder]
+
+=== 3. Adding the Field
+
+Select the "Custom" tab (or JSON field) to find the Iconify Picker.
+
+image::guide-step-03.png[Select Custom Field]
+
+=== 4. Field Configuration
+
+Name your field (e.g., `icon`) and configure any advanced settings.
+
+image::guide-step-04.png[Configure Field]
+
+=== 5. Saving the Content Type
+
+Save your changes. The server will restart to apply the new schema.
+
+image::guide-step-05.png[Save Schema]
+
+=== 6. Using the Picker
+
+Go to the Content Manager and create a new entry. You will see the new Iconify Picker field.
+
+image::guide-step-06.png[Content Manager Entry]
+
+=== 7. Selecting Icons
+
+Use the dropdown to filter by collection, or search directly for an icon.
+
+image::guide-step-07.png[Select Icon]
+
+*(For steps 8-11, refer to the full usage flow in the introduction.)*
 
 == Screenshots
 

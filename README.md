@@ -1,6 +1,6 @@
 # Strapi Iconify Picker
 
-![Strapi Iconify Picker](public/strapi-iconify-picker-usage.png)
+![Strapi Iconify Picker](docs/modules/ROOT/assets/images/strapi-iconify-picker-usage.png)
 
 **Design at the speed of thought.**
 
@@ -53,7 +53,7 @@ Designed for focus. The interface puts your content first.
 2. **Search**: Find your icon instantly.
 3. **Pick**: Click to select. The preview confirms your choice.
 
-![Configuration](public/strapi-iconify-picker-configuration.png)
+![Configuration](docs/modules/ROOT/assets/images/strapi-iconify-picker-configuration.png)
 
 ## Architecture
 
