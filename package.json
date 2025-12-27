@@ -1,6 +1,15 @@
 {
-  "version": "0.0.0",
-  "keywords": [],
+  "version": "1.0.0",
+  "keywords": [
+    "strapi",
+    "plugin",
+    "v5",
+    "iconify",
+    "icons",
+    "picker",
+    "custom-field",
+    "design-system"
+  ],
   "type": "commonjs",
   "exports": {
     "./package.json": "./package.json",
@@ -61,18 +70,18 @@
     "kind": "plugin",
     "name": "dls-iconify-picker",
     "displayName": "Iconify Picker",
-    "description": "Custom field that lets editors pick an Iconify icon from configured collections and stores the selection."
+    "description": "The ultimate icon selection experience for Strapi v5. Access 150,000+ icons with a premium, focused workflow."
   },
   "name": "dls-iconify-picker",
-  "description": "Custom field that lets editors pick an Iconify icon from configured collections and stores the selection.",
+  "description": "The ultimate icon selection experience for Strapi v5. Access 150,000+ icons with a premium, focused workflow.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Sunny-Pirate/strapi-plugin-iconify-picker.git"
+    "url": "git+ssh://git@github.com/Sunny-Pirate/dls-iconify-picker.git"
   },
   "bugs": {
-    "url": "https://github.com/Sunny-Pirate/strapi-plugin-iconify-picker/issues"
+    "url": "https://github.com/Sunny-Pirate/dls-iconify-picker/issues"
   },
-  "homepage": "https://github.com/Sunny-Pirate/strapi-plugin-iconify-picker#readme",
+  "homepage": "https://github.com/Sunny-Pirate/dls-iconify-picker#readme",
   "author": "Luca Faccio <info@dreamlab.solutions>"
 }

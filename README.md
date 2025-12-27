@@ -49,11 +49,19 @@ npm run build && npm run develop
 
 Designed for focus. The interface puts your content first.
 
-1. **Select**: Choose a collection from the dropdown.
-2. **Search**: Find your icon instantly.
-3. **Pick**: Click to select. The preview confirms your choice.
+### Visual Workflow
 
-![Configuration](docs/modules/ROOT/assets/images/strapi-iconify-picker-configuration.png)
+| 🔍 **Search & Filter** | 👁️ **Instant Preview** |
+| :--- | :--- |
+| ![Search](docs/modules/ROOT/assets/images/guide-step-07.png) | ![Preview](docs/modules/ROOT/assets/images/strapi-iconify-picker-usage.png) |
+
+| ⚙️ **Governance** |
+| :--- |
+| ![Configuration](docs/modules/ROOT/assets/images/strapi-iconify-picker-configuration.png) |
+
+1. **Selection**: Choose from curated collections.
+2. **Discovery**: High-performance search helps you find the perfect icon in seconds.
+3. **Preview**: Instant visual feedback ensures your selection matches your design.
 
 ## Architecture
 
