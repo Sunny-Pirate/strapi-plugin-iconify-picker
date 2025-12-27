@@ -1,0 +1,4 @@
+{
+  "dls-iconify-picker.plugin.name": "Iconify Picker",
+  "dls-iconify-picker.plugin.description": "Custom field that lets editors pick an Iconify icon from configured collections and stores the selection."
+}
