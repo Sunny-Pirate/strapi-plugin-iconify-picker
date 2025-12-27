@@ -1,0 +1,72 @@
+= NPM Publishing Guide
+:description: Best practices for publishing the Iconify Picker plugin to the NPM registry.
+
+This guide outlines the workflow for releasing new versions of the `strapi-plugin-iconify-picker`. It covers both manual publishing with Two-Factor Authentication (2FA) and automated delivery via GitHub Actions.
+
+== Versioning Principles
+
+We follow link:https://semver.org/[Semantic Versioning (SemVer)]. Before publishing, determine the type of change:
+
+*   **Patch**: Backward-compatible bug fixes.
+*   **Minor**: Backward-compatible new features.
+*   **Major**: Breaking changes.
+
+== Automated Publishing (Recommended)
+
+The project is pre-configured with a GitHub Action to automate the release process. This method is preferred as it avoids manual 2FA entry during the CI/CD pipeline.
+
+=== Configuration
+
+1.  **Generate an Automation Token**:
+    *   Log in to your link:https://www.npmjs.com/[npm account].
+    *   Navigate to **Access Tokens** > **Generate New Token**.
+    *   Select the **Automation** type (this bypasses 2FA for publishing).
+2.  **Configure GitHub Secrets**:
+    *   In your GitHub repository, go to **Settings** > **Secrets and variables** > **Actions**.
+    *   Create a new repository secret named `NPM_TOKEN`.
+
+=== Execution
+
+To trigger a new release, simply create and push a Git tag:
+
+```bash
+# Automatically increments version, creates a commit, and a tag
+npm version patch
+
+# Push everything to the remote
+git push origin master --tags
+```
+
+The GitHub Action in `.github/workflows/publish.yml` will automatically build the plugin and push it to the NPM registry.
+
+== Manual Publishing
+
+If you need to publish manually from your local machine, follow these steps to ensure Git and NPM remain synchronized.
+
+=== Step-by-Step Workflow
+
+1.  **Update Version & Tag**:
+    ```bash
+    yarn version --new-version [version]
+    # Example: yarn version --new-version 1.0.1
+    ```
+2.  **Sync with GitHub**:
+    ```bash
+    git push origin master --tags
+    ```
+3.  **Perform the Publish**:
+    Since 2FA is enabled on your account, you must provide the One-Time Password (OTP) from your authenticator app.
+    ```bash
+    npm publish --otp=XXXXXX
+    ```
+
+[IMPORTANT]
+====
+The `package.json` includes a `prepublishOnly` script that automatically runs `npm run build`. This ensures that you never accidentally publish source code without the compiled distribution assets.
+====
+
+== Security Best Practices
+
+*   **Automation Tokens**: Use them exclusively for CI/CD. Never share them or commit them to the repository.
+*   **Scoped Access**: Ensure your NPM token has only the necessary permissions for the specific package.
+*   **Build Verification**: Always verify that the `dist/` folder is correctly populated before running a manual publish.

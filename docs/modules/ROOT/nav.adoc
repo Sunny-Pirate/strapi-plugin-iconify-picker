@@ -1,1 +1,2 @@
 * xref:iconify-picker.adoc[]
+* xref:publishing-guide.adoc[]
