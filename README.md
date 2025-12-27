@@ -51,15 +51,15 @@ Designed for focus. The interface puts your content first.
 
 ### Visual Workflow
 
-| 🔍 **Search & Filter** | 👁️ **Instant Preview** |
+| 🔍 **Search Experience** | 👁️ **Final Selection** |
 | :--- | :--- |
-| ![Search](docs/modules/ROOT/assets/images/guide-step-07.png) | ![Preview](docs/modules/ROOT/assets/images/strapi-iconify-picker-usage.png) |
+| ![Search](docs/modules/ROOT/assets/images/guide-step-10.png) | ![Preview](docs/modules/ROOT/assets/images/guide-step-11.png) |
 
-| ⚙️ **Governance** |
+| ⚙️ **Governance & Control** |
 | :--- |
 | ![Configuration](docs/modules/ROOT/assets/images/strapi-iconify-picker-configuration.png) |
 
-1. **Selection**: Choose from curated collections.
+1. **Selection**: Select from curated collections tailored to your brand.
 2. **Discovery**: High-performance search helps you find the perfect icon in seconds.
 3. **Preview**: Instant visual feedback ensures your selection matches your design.
 
