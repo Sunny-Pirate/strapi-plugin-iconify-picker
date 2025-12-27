@@ -1,0 +1,5 @@
+name: dls-iconify-picker
+title: Iconify Picker Plugin
+version: master
+nav:
+- modules/ROOT/nav.adoc

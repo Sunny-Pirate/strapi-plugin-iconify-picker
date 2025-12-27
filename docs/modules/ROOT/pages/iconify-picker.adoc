@@ -1,0 +1,51 @@
+= Iconify Picker Plugin
+:description: User guide for the Strapi Iconify Picker plugin.
+:imagesdir: ../assets/images
+
+The `dls-iconify-picker` is a robust custom field for Strapi v5 that allows editors to easily search, select, and manage icons from the vast [Iconify](https://iconify.design/) ecosystem.
+
+== Features
+
+*   **Search & Pagination**: Quickly find the right icon with a built-in search bar and efficient pagination.
+*   **Visual Preview**: See exactly what you're picking with a large, clear preview area.
+*   **Multi-Collection Support**: Configure which icon sets (e.g., Solar, Lucide) are available to your editors.
+*   **JSON Storage**: Stores data safely as a structured JSON object.
+
+== Configuration
+
+Before using the picker, an administrator can configure which icon collections are available.
+
+1.  Navigate to **Settings** -> **Iconify Picker** (or the Plugin Homepage).
+2.  You will see a list of available icon sets (Diagnostic & Governance).
+3.  Use the toggles to enable or disable specific collections for your editors.
+
+image::iconify-config.png[Configuration Screen]
+
+== Usage Guide
+
+To use the icon picker in the Content Manager:
+
+1.  **Open an Entry**: Navigate to the collection type where you added the Iconify Picker field.
+2.  **Select Collection**: Use the dropdown in the top-left to choose an icon set (e.g., `solar`).
+3.  **Search Icons**: Type in the search bar (top-right) to filter icons by name.
+4.  **Browse**: Use the pagination controls (Next, Previous, Page Numbers) to browse through the results.
+5.  **Select**: Click on an icon in the grid (bottom-right).
+6.  **Preview**: The selected icon will appear in the large preview box (bottom-left) along with its name.
+    *   To remove a selection, click the **Remove** button in the preview area.
+
+image::iconify-usage.png[Usage Screenshot]
+
+== Data Format
+
+The field stores the selected icon as a JSON object, ensuring you have all the necessary metadata:
+
+[source,json]
+----
+{
+  "prefix": "solar",
+  "icon": "box-bold",
+  "value": "solar:box-bold"
+}
+----
+
+This structure allows you to easily render the icon in your frontend application using the `prefix` and `icon` name.
